@@ -1,1 +1,1 @@
-This rep contains Daijah's portfolio and SPS projects. 
+This repo contains Daijah's portfolio and SPS projects.
