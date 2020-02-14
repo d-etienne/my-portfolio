@@ -1,1 +1,1 @@
-This repo contains Daijah's portfolio and SPS projects.
+This repo contains Daijah Etienne's portfolio and SPS projects.
