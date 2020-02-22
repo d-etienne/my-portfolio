@@ -1,3 +1,27 @@
+.header{
+    font-family:  Roboto, sans-serif;
+    color:#F1F1F1;
+    background-color: black;
+    text-align: center;
+    padding: 20px;
+}
+.header h1{
+    letter-spacing: 10px; 
+    word-spacing: 10px;
+    text-transform: uppercase;
+}
+.topnav{
+    overflow:hidden;
+    background-color:lightskyblue;
+}
+h2{
+    margin-bottom: 0px;
+}
+
+p.a{
+    margin-top: 0.20px;
+}
+
 #content {
   margin-left: auto;
   margin-right: auto;
