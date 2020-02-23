@@ -2,17 +2,63 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Daijah's Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
   <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+    <div class="header">
+        <h1> Daijah Etienne</h1>
+        <p style = "bold">Welcome to the home of the BeautifulNerdd, AKA my portfolio.</p>
     </div>
+    <div class="topnav">
+        
+    </div>
+    <div class="row">
+  <div class="leftcolumn">
+    <div class="card">
+      <h2>About Me</h2>
+      <img src="/images/ProfileImage.jpg" width = "200" height = "250"/>
+      <p>Hey, my name is Daijah Etienne, though I love thinking of myself as a beautifulNerdd. 
+          I am currently a sophomore studying Computer Science with a minor in Integrated Digital Media at New York University. </p>
+          I really enjoy being creative and am currently taking a journey into discovering how to combine
+          my love for creativity with my interest in devloping code. This portfolio is meant to be a documentation of my journey and 
+          I hope that you enjoy traveling through it with me.</p>
+      <p> Best, BeautifulNerdd. </p>
+    </div>
+
+    <div class="card">
+      <h2>Design Projects</h2>
+      <p> Here are some of my favorite graphic projects that I have created:<p>
+      <div class = "center" >
+        <img src= "/images/RupiKaurEditorial.png" width = "160" height = "200"/>
+        <img src = "/images/Rihanna Vector Portrait.jpg" width = "200" height = "200" />
+        <img src = "/images/Human Condition Inspired Brochure.jpg" width = "300" height = "200" />
+      </div>
+    </div>
+  </div>
+  <div class="rightcolumn">
+    <div class="card">
+      <h2>Current Obsessions</h2>
+      <p>In this section, I wanted to share some of my entertainment that I have been currently enjoying: </p>
+      <ul>
+          <li>Changes by Justin Bieber (Music Album) </li>
+          <li>Snake The Snow Globe by Russ (Music Album)</li>
+          <li>Manic by Halsey (Music Album)</li>
+          <li>Bojack Horseman (Netflix Show) </li>
+          <li>Demon Slayer (Anime) </li>
+          <li>Knives Out (Movie)</li>
+      </ul> 
+      <button onclick="addFunFacts()">Fun Facts</button>
+      <div id="funFact-container"></div>     
+    </div>
+    <div class="card">
+      <h2>Want to Know More...</h2>
+        <a href="https://www.linkedin.com/in/daijah-etienne-923199145/" > <img src="/images/LinkedIn.jpg" style= "width:100px;height:100px;border:0;">
+        <a href="https://github.com/d-etienne"> <img src="/images/github-512.png" style="width:100px;height:100px;border:0;">
+
+    </div>
+  </div>
+</div>
   </body>
 </html>

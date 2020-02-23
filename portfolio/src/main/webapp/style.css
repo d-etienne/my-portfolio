@@ -1,7 +1,56 @@
-#content {
+* {
+  box-sizing: border-box;
+}
+.header{
+    font-family:  Roboto, sans-serif;
+    color:#F1F1F1;
+    background-color: black;
+    text-align: center;
+    padding: 20px;
+}
+body {
+  font-family: Arial;
+  padding: 10px;
+  background: black;
   margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+  margin-right:auto;
+  width: 900px;
+}
+.center{
+    text-align: center;
+}
+.card {
+  background-color: white;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.header h1{
+    letter-spacing: 10px; 
+    word-spacing: 10px;
+    text-transform: uppercase;
+}
+h2{
+    text-transform: uppercase;
+}
+.topnav{
+    overflow:hidden;
+    background-color:lightskyblue;
+}
+h2{
+    margin-bottom: 0px;
+}
+
+.card .a{
+    text-align: center;
+    margin-top: 0.20px;
 }
 
 #greeting-container {
