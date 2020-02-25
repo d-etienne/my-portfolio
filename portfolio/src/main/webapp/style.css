@@ -41,7 +41,8 @@ h2{
     text-transform: uppercase;
 }
 .topnav{
-    overflow:hidden;
+    position: -webkit-sticky ;
+    position: sticky;
     background-color:lightskyblue;
 }
 h2{
