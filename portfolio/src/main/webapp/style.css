@@ -14,7 +14,10 @@ body {
   background: black;
   margin-left: auto;
   margin-right:auto;
+  /*margin-left: auto;
+  margin-right:auto;
   width: 900px;
+  */
 }
 .center{
     text-align: center;
@@ -41,9 +44,25 @@ h2{
     text-transform: uppercase;
 }
 .topnav{
-    position: -webkit-sticky ;
+    list-style-type: none;
+    padding: 0;
+    position: -webkit-sticky; /* Safari */
     position: sticky;
+    top: 0;
+    text-align: center;
     background-color:lightskyblue;
+}
+.topnav a{
+    font-family:  Roboto, sans-serif;
+    display:inline-block;
+    font-size: 20pt;
+    padding: 14px 16px;
+    border-right:solid black;
+    color: black;
+    text-decoration: none;
+}
+.topnav :last-child{
+    border-right:none;
 }
 h2{
     margin-bottom: 0px;
