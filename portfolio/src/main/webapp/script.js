@@ -19,10 +19,17 @@ function addFunFacts() {
   const funFacts =
       ['Ive been a vegitarian since my 10th grade year of highschool!', 'My favorite movie of all time is Madagascar :)', 'I am originally from Maryland, around the DC area!', 'My favorite food is french fries!'];
 
-  // Pick a random greeting.
+  // Pick a random fun fact.
   const funFact = funFacts[Math.floor(Math.random() * funFacts.length)];
 
   // Add it to the page.
   const factContainer = document.getElementById('funFact-container');
   factContainer.innerText = funFact;
+}
+
+
+async function personalGreeting() {
+  const response = await fetch('/data');
+  const greeting = await response.text();
+  document.getElementById('greeting-spot').innerHTML = greeting;
 }

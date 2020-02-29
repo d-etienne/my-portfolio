@@ -24,8 +24,17 @@ body {
 }
 .card {
   background-color: white;
+  float: center; 
+  width: 70%;
   padding: 20px;
-  margin-top: 20px;
+  /*margin-top: 20px; */
+}
+
+/* Allows the page to be responsive to different screens */
+@media screen and (max-width: 600px){
+    .card{
+        width: 100% ; 
+    }
 }
 
 /* Clear floats after the columns */
