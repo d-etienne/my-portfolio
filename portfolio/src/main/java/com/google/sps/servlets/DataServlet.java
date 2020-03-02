@@ -27,25 +27,33 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  ArrayList<String> quotes = new ArrayList<String>();
+  ArrayList<String> comments = new ArrayList<String>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    quotes.add("It isnt where you came from. Its where you are going that counts. - Ella Fitzgerald");
-    quotes.add("Try to be the rainbow to someone elses clouds. - Maya Angelou");
-    quotes.add("Beauty is being the best possible version of yourself, inside and out - Audrey Hepburn");
-    for (int idx = 0; idx < quotes.size(); idx++ ){
-        String json = convertToJson(quotes.get(idx));
-        response.setContentType("/application/json;");
+        String json = convertToJson(comments);
+        response.setContentType("application/json;");
         response.getWriter().println(json);
-    }
   }
-  
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+      String comment = getComment(request);
+      comments.add(comment);
+      response.sendRedirect("/index.html");
+    }
+
+
+  private String convertToJson(ArrayList comments){
     Gson gson = new Gson();
-    String json = gson.toJson(quote);
+    String json = gson.toJson(comments);
     return json;
   }
 
+    private String getComment(HttpServletRequest request) {
+        String comment = request.getParameter("comment-box");
+        return comment;
+  }
 
 }
 

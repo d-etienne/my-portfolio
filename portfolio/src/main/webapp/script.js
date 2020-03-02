@@ -27,10 +27,40 @@ function addFunFacts() {
   factContainer.innerText = funFact;
 }
 
+/*
 
-async function getComments() {
-    const response = await fetch('/data');
-    const comments = await response.text();
-    console.log(comments);
-    document.getElementById('comment-spot').innerHTML = comments;
+function getComments() {
+    fetch('/data').then(response => response.json()).then((comments) => {
+    const commentList = document.getElementById('comment-spot');
+    commentList.innerHTML = '';
+    comments.forEach((line) => {
+      console.log(line);
+      commentList.appendChild(createListElement(line));
+    });
+
+    for(let comment in comments){
+        var message = createListElement(comments[comment]);
+        console.log(message);
+        commentList.appendChild(message);
+        }
+    });
 }
+*/
+async function getComments() {
+  const response = await fetch('/data');
+  const comments = await response.json();
+  const commentList = document.getElementById('comment-spot');
+  console.log(commentList);
+  commentList.innerHTML = '';
+  comments.forEach((line) => {
+      console.log(line);
+      commentList.appendChild(createListElement(line));
+  });
+}
+
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
+

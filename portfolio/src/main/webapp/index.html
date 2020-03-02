@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload = "getComments()">
     <div class="header">
         <h1> Daijah Etienne</h1>
         <p style = "bold">Welcome to the home of the BeautifulNerdd, AKA my portfolio.</p>
@@ -41,8 +41,13 @@
         <img src= "/images/RupiKaurEditorial.png" width = "160" height = "200"/>
         <img src = "/images/Rihanna Vector Portrait.jpg" width = "200" height = "200" />
         <img src = "/images/Human Condition Inspired Brochure.jpg" width = "300" height = "200" />
-        <button onclick= "getComments()">See Other People's Comments!</button>
-        <div id = "comment-spot"></div>
+        <form action= "/data" method = "POST">
+            <p> Comment Below! </p>
+            <input type="/text" name = "comment-box">
+            <br/><br/>
+            <input type="submit" />
+        </form>
+        <div id = "comment-spot"> </div>
       </div>
     </div>
   </div>
