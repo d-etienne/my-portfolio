@@ -14,6 +14,9 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import com.google.gson.Gson;
 import java.util.ArrayList;
@@ -31,29 +34,30 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String json = convertToJson(comments);
-        response.setContentType("application/json;");
-        response.getWriter().println(json);
+        String json = convertToJson(comments); // converts arroy of comments to JSON
+        response.setContentType("application/json;"); // Identifies to server the type of data to expect
+        response.getWriter().println(json);// writes to server the JSON data
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-      String comment = getComment(request);
-      comments.add(comment);
-      response.sendRedirect("/index.html");
+        String comment = request.getParameter("comment-box"); //grabs written response from the comment box 
+        comments.add(comment); // adds comment to the array of comments
+
+        Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("message", comment);
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); // creates a instance of the datastore
+        datastore.put(commentEntity); 
+        response.sendRedirect("/index.html"); //redirects the person back to the original page
     }
 
-
+// converts array of comments into a JSON
   private String convertToJson(ArrayList comments){
-    Gson gson = new Gson();
-    String json = gson.toJson(comments);
-    return json;
+        Gson gson = new Gson();
+        String json = gson.toJson(comments);
+        return json;
   }
-
-    private String getComment(HttpServletRequest request) {
-        String comment = request.getParameter("comment-box");
-        return comment;
-  }
-
+ 
 }
 

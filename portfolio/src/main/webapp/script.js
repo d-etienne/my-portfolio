@@ -12,40 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
-function addFunFacts() {
-  const funFacts =
-      ['Ive been a vegitarian since my 10th grade year of highschool!', 'My favorite movie of all time is Madagascar :)', 'I am originally from Maryland, around the DC area!', 'My favorite food is french fries!'];
-
-  // Pick a random fun fact.
-  const funFact = funFacts[Math.floor(Math.random() * funFacts.length)];
-
-  // Add it to the page.
-  const factContainer = document.getElementById('funFact-container');
-  factContainer.innerText = funFact;
-}
-
-/*
-
-function getComments() {
-    fetch('/data').then(response => response.json()).then((comments) => {
-    const commentList = document.getElementById('comment-spot');
-    commentList.innerHTML = '';
-    comments.forEach((line) => {
-      console.log(line);
-      commentList.appendChild(createListElement(line));
-    });
-
-    for(let comment in comments){
-        var message = createListElement(comments[comment]);
-        console.log(message);
-        commentList.appendChild(message);
-        }
-    });
-}
-*/
+// fetches the comments from the /data page and displays them on the /index.html
 async function getComments() {
   const response = await fetch('/data');
   const comments = await response.json();
