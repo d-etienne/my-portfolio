@@ -28,8 +28,9 @@ function addFunFacts() {
 }
 
 
-async function personalGreeting() {
-  const response = await fetch('/data');
-  const greeting = await response.text();
-  document.getElementById('greeting-spot').innerHTML = greeting;
+async function getComments() {
+    const response = await fetch('/data');
+    const comments = await response.text();
+    console.log(comments);
+    document.getElementById('comment-spot').innerHTML = comments;
 }
