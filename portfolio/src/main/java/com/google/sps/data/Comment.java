@@ -12,22 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// fetches the comments from the /data page and displays them on the /index.html
-async function getComments() {
-  const response = await fetch('/data');
-  const comments = await response.json();
-  const commentList = document.getElementById('comment-spot');
-  console.log(commentList);
-  commentList.innerHTML = '';
-  comments.forEach((line) => {
-      console.log(line);
-      commentList.appendChild(createListElement(line));
-  });
-}
+package com.google.sps.data;
 
-function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
-}
+/** An item on a todo list. */
+public final class Comment {
+  private final String message;
+  private final long timestamp;
 
+  public Comment( String message, long timestamp) {
+    this.message = message;
+    this.timestamp = timestamp;
+  }
+}
