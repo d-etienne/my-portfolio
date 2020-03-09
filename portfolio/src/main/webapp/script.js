@@ -17,7 +17,6 @@ function getComments() {
   fetch('/data').then(response => response.json()).then((comments) => {
 
     const commentsListElement = document.getElementById('comment-spot');
-    console.log(comments);
     commentsListElement.innerHTML = '';
     commentsListElement.appendChild(
         createListElement('Name: ' + comments["Name"]));
