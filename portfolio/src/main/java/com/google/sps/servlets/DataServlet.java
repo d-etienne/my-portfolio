@@ -51,9 +51,9 @@ public class DataServlet extends HttpServlet {
             for (Entity entity : results.asIterable()) {
                 String name = (String) entity.getProperty("name");
                 String message = (String) entity.getProperty("message");
-                long timestamp = (long) entity.getProperty("timestamp");
+                long sentimentScore = (long) entity.getProperty("sentiment-score");
 
-            Comment comment = new Comment(name, message, timestamp);
+            Comment comment = new Comment(name, message, sentimentScore);
             savedComments.add(comment);
     }
         String json = convertToJson(comments); // converts array of comments to JSON
@@ -67,7 +67,6 @@ public class DataServlet extends HttpServlet {
         String name = request.getParameter("name-box");
         names.add(name); // adds name to array of names
         comments.add(comment); // adds comment to the array of comments
-        long timestamp = System.currentTimeMillis();
 
         //creates a document with the entered comment and scores the sentiment value of it
         Document doc = Document.newBuilder().setContent(comment).setType(Document.Type.PLAIN_TEXT).build();
@@ -76,15 +75,12 @@ public class DataServlet extends HttpServlet {
         float score = sentiment.getScore(); 
         languageService.close(); 
 
-        System.out.println("<p>You entered: " + comment + "</p>");
-        System.out.println("<p>Sentiment analysis score: " + score + "</p>");
-
+        //stores the messages, names, and sentiment scores of the comments
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("name", name);
-        //commentEntity.setProperty("message", comment);
-        //commentEntity.setProperty("sentiment-score", score)
-        commentEntity.setProperty("timestamp", timestamp);
+        commentEntity.setProperty("message", comment);
+        commentEntity.setProperty("sentiment-score", score);
         datastore.put(commentEntity); 
         response.sendRedirect("/index.html"); //redirects the person back to the original page 
     }
