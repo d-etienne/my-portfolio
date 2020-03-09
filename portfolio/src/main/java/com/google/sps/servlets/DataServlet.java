@@ -38,8 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  ArrayList<String> comments = new ArrayList<String>();
-  ArrayList<String> names = new ArrayList<String>();
+  ArrayList<Comment> comments = new ArrayList<Comment>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -51,29 +50,30 @@ public class DataServlet extends HttpServlet {
             for (Entity entity : results.asIterable()) {
                 String name = (String) entity.getProperty("name");
                 String message = (String) entity.getProperty("message");
-                long sentimentScore = (long) entity.getProperty("sentiment-score");
+                float sentimentScore = (float) entity.getProperty("sentiment-score");
 
             Comment comment = new Comment(name, message, sentimentScore);
             savedComments.add(comment);
     }
-        String json = convertToJson(comments); // converts array of comments to JSON
-        response.setContentType("application/json;"); // Identifies to server the type of data to expect
-        response.getWriter().println(json);// writes to server the JSON data
+        for (int idx = 0 ; idx < comments.size(); ++idx){
+            String json = convertToJson(comments.get(idx)); // converts array of comments to JSON
+            response.setContentType("application/json;"); // Identifies to server the type of data to expect
+            response.getWriter().println(json);// writes to server the JSON data
+        }
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
         String comment = request.getParameter("comment-box"); //grabs written response from the comment box 
         String name = request.getParameter("name-box");
-        names.add(name); // adds name to array of names
-        comments.add(comment); // adds comment to the array of comments
-
+    
         //creates a document with the entered comment and scores the sentiment value of it
         Document doc = Document.newBuilder().setContent(comment).setType(Document.Type.PLAIN_TEXT).build();
         LanguageServiceClient languageService = LanguageServiceClient.create();
         Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
         float score = sentiment.getScore(); 
         languageService.close(); 
+        comments.add(new Comment(name, comment, score));
 
         //stores the messages, names, and sentiment scores of the comments
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -86,10 +86,18 @@ public class DataServlet extends HttpServlet {
     }
 
 // converts array of comments into a JSON
-  private String convertToJson(ArrayList comments){
-        Gson gson = new Gson();
-        String json = gson.toJson(comments);
-        return json;
+ private String convertToJson(Comment commentMessage) {
+    String json = "{";
+    json += "\"Name\": ";
+    json += "\"" + commentMessage.getName() + "\"";
+    json += ", ";
+    json += "\"Comment\": ";
+    json += "\"" + commentMessage.getMessage() + "\"";
+    json += ", ";
+    json += "\"Sentiment Score\": ";
+    json += commentMessage.getSentimentScore();
+    json += "}";
+    return json;
   }
  
 }

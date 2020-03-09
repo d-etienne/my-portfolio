@@ -18,11 +18,23 @@ package com.google.sps.data;
 public final class Comment {
     private final String name;
     private final String message;
-    private final long sentimentScore;
+    private final float sentimentScore;
 
-    public Comment(String name, String message, long sentimentScore) {
+    public Comment(String name, String message, float sentimentScore) {
         this.name = name; 
         this.message = message;
         this.sentimentScore = sentimentScore;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String getMessage(){
+        return message;
+    }
+
+    public float getSentimentScore(){
+        return sentimentScore;
     }
 }

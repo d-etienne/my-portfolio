@@ -13,15 +13,18 @@
 // limitations under the License.
 
 // fetches the comments from the /data page and displays them on the /index.html
-async function getComments() {
-  const response = await fetch('/data');
-  const comments = await response.json();
-  const commentList = document.getElementById('comment-spot');
-  console.log(commentList);
-  commentList.innerHTML = '';
-  comments.forEach((line) => {
-      console.log(line);
-      commentList.appendChild(createListElement(line));
+function getComments() {
+  fetch('/data').then(response => response.json()).then((comments) => {
+
+    const commentsListElement = document.getElementById('comment-spot');
+    console.log(comments);
+    commentsListElement.innerHTML = '';
+    commentsListElement.appendChild(
+        createListElement('Name: ' + comments["Name"]));
+    commentsListElement.appendChild(
+        createListElement('Comment: ' + comments["Comment"]));
+    commentsListElement.appendChild(
+        createListElement('Sentiment Score: ' + comments["Sentiment Score"]));
   });
 }
 
