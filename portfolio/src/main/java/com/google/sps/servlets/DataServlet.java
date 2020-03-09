@@ -14,6 +14,9 @@
 
 package com.google.sps.servlets;
 
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -36,6 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DataServlet extends HttpServlet {
 
   ArrayList<String> comments = new ArrayList<String>();
+  ArrayList<String> names = new ArrayList<String>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -45,10 +49,11 @@ public class DataServlet extends HttpServlet {
         
         ArrayList<Comment> savedComments = new ArrayList<>();
             for (Entity entity : results.asIterable()) {
+                String name = (String) entity.getProperty("name");
                 String message = (String) entity.getProperty("message");
                 long timestamp = (long) entity.getProperty("timestamp");
 
-            Comment comment = new Comment(message, timestamp);
+            Comment comment = new Comment(name, message, timestamp);
             savedComments.add(comment);
     }
         String json = convertToJson(comments); // converts array of comments to JSON
@@ -59,14 +64,29 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
         String comment = request.getParameter("comment-box"); //grabs written response from the comment box 
+        String name = request.getParameter("name-box");
+        names.add(name); // adds name to array of names
         comments.add(comment); // adds comment to the array of comments
         long timestamp = System.currentTimeMillis();
+
+        //creates a document with the entered comment and scores the sentiment value of it
+        Document doc = Document.newBuilder().setContent(comment).setType(Document.Type.PLAIN_TEXT).build();
+        LanguageServiceClient languageService = LanguageServiceClient.create();
+        Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+        float score = sentiment.getScore(); 
+        languageService.close(); 
+
+        System.out.println("<p>You entered: " + comment + "</p>");
+        System.out.println("<p>Sentiment analysis score: " + score + "</p>");
+
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("message", comment);
+        commentEntity.setProperty("name", name);
+        //commentEntity.setProperty("message", comment);
+        //commentEntity.setProperty("sentiment-score", score)
         commentEntity.setProperty("timestamp", timestamp);
         datastore.put(commentEntity); 
-        response.sendRedirect("/index.html"); //redirects the person back to the original page
+        response.sendRedirect("/index.html"); //redirects the person back to the original page 
     }
 
 // converts array of comments into a JSON
