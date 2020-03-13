@@ -14,6 +14,9 @@
 
 package com.google.sps.servlets;
 
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -35,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  ArrayList<String> comments = new ArrayList<String>();
+  ArrayList<Comment> comments = new ArrayList<Comment>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -45,35 +48,56 @@ public class DataServlet extends HttpServlet {
         
         ArrayList<Comment> savedComments = new ArrayList<>();
             for (Entity entity : results.asIterable()) {
+                String name = (String) entity.getProperty("name");
                 String message = (String) entity.getProperty("message");
-                long timestamp = (long) entity.getProperty("timestamp");
+                float sentimentScore = (float) entity.getProperty("sentiment-score");
 
-            Comment comment = new Comment(message, timestamp);
+            Comment comment = new Comment(name, message, sentimentScore);
             savedComments.add(comment);
     }
-        String json = convertToJson(comments); // converts array of comments to JSON
-        response.setContentType("application/json;"); // Identifies to server the type of data to expect
-        response.getWriter().println(json);// writes to server the JSON data
+        for (int idx = 0 ; idx < comments.size(); ++idx){
+            String json = convertToJson(comments.get(idx)); // converts array of comments to JSON
+            response.setContentType("application/json;"); // Identifies to server the type of data to expect
+            response.getWriter().println(json);// writes to server the JSON data
+        }
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
         String comment = request.getParameter("comment-box"); //grabs written response from the comment box 
-        comments.add(comment); // adds comment to the array of comments
-        long timestamp = System.currentTimeMillis();
+        String name = request.getParameter("name-box");
+    
+        //creates a document with the entered comment and scores the sentiment value of it
+        Document doc = Document.newBuilder().setContent(comment).setType(Document.Type.PLAIN_TEXT).build();
+        LanguageServiceClient languageService = LanguageServiceClient.create();
+        Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+        float score = sentiment.getScore(); 
+        languageService.close(); 
+        comments.add(new Comment(name, comment, score));
+
+        //stores the messages, names, and sentiment scores of the comments
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("name", name);
         commentEntity.setProperty("message", comment);
-        commentEntity.setProperty("timestamp", timestamp);
+        commentEntity.setProperty("sentiment-score", score);
         datastore.put(commentEntity); 
-        response.sendRedirect("/index.html"); //redirects the person back to the original page
+        response.sendRedirect("/index.html"); //redirects the person back to the original page 
     }
 
 // converts array of comments into a JSON
-  private String convertToJson(ArrayList comments){
-        Gson gson = new Gson();
-        String json = gson.toJson(comments);
-        return json;
+ private String convertToJson(Comment commentMessage) {
+    String json = "{";
+    json += "\"Name\": ";
+    json += "\"" + commentMessage.getName() + "\"";
+    json += ", ";
+    json += "\"Comment\": ";
+    json += "\"" + commentMessage.getMessage() + "\"";
+    json += ", ";
+    json += "\"Sentiment Score\": ";
+    json += commentMessage.getSentimentScore();
+    json += "}";
+    return json;
   }
  
 }
